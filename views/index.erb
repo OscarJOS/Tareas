@@ -25,26 +25,45 @@
         <button type="submit" class="btn btn-primary">Crear Tarea</button>
       </form>
       <hr>
-      <ul class="list-group">
-      <% @tareas.each do |tarea| %>
-        <li class="list-group-item text-center">
-          <strong ><%= tarea["title"] %></strong>
-        </li>
-        <li class="list-group-item text-center">
-          <span>
-            <form action="/update/<%= tarea["id"] %>" method="post">
-              <input type="hidden" name="_method" value="patch">
-              <button class="btn btn-success btn-sm" type="submit button">Completa</button>
-            </form>
-            <hr>
-            <form action="/delete/<%= tarea["id"] %>" method="post">
-             <input type="hidden" name="_method" value="delete">
-             <button class="btn btn-danger btn-sm" type="submit button">Eliminar</button>
-            </form>
-          </span>
-         </li>
+      <% if @tareas.empty? %>
+      <h3 class="text-center">No tienes tareas pendientes. Felicitaciones!</h3>
+      <% else %>
+        <div class="btn-group">
+          <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Tareas
+          </button>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" href="/">Todas</a>
+            <a class="dropdown-item" href="/">Sin Completar</a>
+            <a class="dropdown-item" href="/">Completas</a>
+          </div>
+        </div>
+        <hr>
+        <ul class="list-group">
+        <% @tareas.each do |tarea| %>
+          <li class="list-group-item text-center">
+            <h2><strong ><%= tarea["title"] %></strong></h2>
+          </li>
+          <li class="list-group-item text-center">
+            <span>
+              <% if tarea["done"] == false %>
+                <form action="/update/<%= tarea["id"] %>" method="post">
+                  <input type="hidden" name="_method" value="patch">
+                  <button class="btn btn-success btn-sm" type="submit button">Completa</button>
+                </form>
+              <% else %>
+                <h6>Completaste esta tarea. Buen trabajo!</h6>
+              <% end %>
+              <hr>
+              <form action="/delete/<%= tarea["id"] %>" method="post">
+               <input type="hidden" name="_method" value="delete">
+               <button class="btn btn-danger btn-sm" type="submit button">Eliminar</button>
+              </form>
+            </span>
+           </li>
+        <% end %>
+        </ul>
       <% end %>
-      </ul>
     </div>
   <!-- Optional JavaScript -->
   <!-- jQuery first, then Popper.js, then Bootstrap JS -->
